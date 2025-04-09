@@ -6,6 +6,14 @@ public class App {
         // (1) Initialize the board based on what is already there
         // determine where the board is in the screenshot
         // fill the board with the pieces that are already there
+        Board board = new Board();
+        board.setCell(5, 2);
+        board.setCell(5,3);
+        board.setCell(5, 4);
+        board.setCell(4, 4);
+        board.printBoard();
+        Piece piece = new Piece(board);
+        piece.printPiece();
 
         // (2) Retrieve the piece options
         // determine where the pieces are
