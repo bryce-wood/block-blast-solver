@@ -1,8 +1,8 @@
 import java.util.BitSet;
 
 public class Board {
-    private int ROWS = 10;
-    private int COLS = 10;
+    private int ROWS = 8;
+    private int COLS = 8;
     private BitSet board;
 
     public Board() {

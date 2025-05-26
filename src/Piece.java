@@ -9,8 +9,8 @@ public class Piece {
         int minRow = Integer.MAX_VALUE, maxRow = Integer.MIN_VALUE;
         int minCol = Integer.MAX_VALUE, maxCol = Integer.MIN_VALUE;
 
-        for (int r = 0; r < 10; r++) {
-            for (int c = 0; c < 10; c++) {
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
                 if (board.getCell(r, c)) {
                     minRow = Math.min(minRow, r);
                     maxRow = Math.max(maxRow, r);
