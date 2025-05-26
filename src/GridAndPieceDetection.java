@@ -10,7 +10,7 @@ public class GridAndPieceDetection {
     }
 
     public static void main(String[] args) {
-        String imagePath = "C:/Users/Bryce/.vscode/Projects/block-blast-solver/src/screenshots/IMG_5928.PNG";
+        String imagePath = "C:/Users/Bryce/.vscode/Projects/block-blast-solver/src/screenshots/IMG_5924.PNG";
         Mat img = Imgcodecs.imread(imagePath);
         if (img.empty()) { System.out.println("Could not read the image."); return; }
 
@@ -108,10 +108,18 @@ public class GridAndPieceDetection {
 
                 for (MatOfPoint blockContour : blockContours) {
                     Rect blockRect = Imgproc.boundingRect(blockContour);
-                    // Filter by approximate square shape and size
-                    if (blockRect.width > 10 && blockRect.height > 10 &&
+                    double area = Imgproc.contourArea(blockContour);
+
+                    // Example expected area for one block (adjust as needed)
+                    double expectedBlockArea = 2500; // 50^2 = 2500 pixels
+                    double areaTolerance = 0.5; // allow ±50% variation
+                
+                    if (area > expectedBlockArea * (1 - areaTolerance) &&
+                        area < expectedBlockArea * (1 + areaTolerance) &&
+                        blockRect.width > 10 && blockRect.height > 10 &&
                         Math.abs(blockRect.width - blockRect.height) < 10) {
                         Imgproc.rectangle(pieceROI, blockRect, new Scalar(0, 255, 0), 2);
+                        System.out.println(i);
                     }
                 }
             }
