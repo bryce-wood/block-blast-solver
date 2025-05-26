@@ -67,6 +67,8 @@ public class GridAndPieceDetection {
             int piecePanelHeight = largestRect.height / 2; // estimate height of piece panel
             Rect piecePanelRect = new Rect(0, piecePanelY, img.cols(), piecePanelHeight);
             Mat piecePanel = new Mat(img, piecePanelRect);
+
+            List<MatOfPoint> blockContoursList = new ArrayList<>();
     
             // Convert to HSV and use Value channel for bright block detection
             Mat pieceHSV = new Mat();
@@ -77,7 +79,7 @@ public class GridAndPieceDetection {
 
             // Threshold to highlight bright blocks
             Mat binary2 = new Mat();
-            Imgproc.threshold(valueChannel, binary2, 180, 255, Imgproc.THRESH_BINARY);
+            Imgproc.threshold(valueChannel, binary2, 150, 255, Imgproc.THRESH_BINARY);
 
             // Find outer piece contours
             List<MatOfPoint> pieceContours = new ArrayList<>();
@@ -119,7 +121,7 @@ public class GridAndPieceDetection {
                         blockRect.width > 10 && blockRect.height > 10 &&
                         Math.abs(blockRect.width - blockRect.height) < 10) {
                         Imgproc.rectangle(pieceROI, blockRect, new Scalar(0, 255, 0), 2);
-                        System.out.println(i);
+                        blockContoursList.add(blockContour);
                     }
                 }
             }
@@ -129,6 +131,8 @@ public class GridAndPieceDetection {
             Mat resizedPanel = new Mat();
             Imgproc.resize(piecePanel, resizedPanel, newSize);
             HighGui.imshow("Detected Pieces and Blocks", resizedPanel);
+
+            System.out.println("Num of blocks in pieces: " + blockContoursList.size());
     
             Size newSizeImg = new Size(img.width() * 0.5, img.height() * 0.5);
             Mat resizedImg = new Mat();
