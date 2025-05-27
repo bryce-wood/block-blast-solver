@@ -1,12 +1,21 @@
 import java.util.BitSet;
 
+import org.opencv.core.Mat;
+
 public class Board {
     private int ROWS = 8;
     private int COLS = 8;
     private BitSet board;
 
+    public Board(Mat screenshot) {
+        board = GridAndPieceDetection.imageToBoard(screenshot);
+    }
+
+    public Board(BitSet board) {
+        this.board = board;
+    }
+
     public Board() {
-        // Create a BitSet with 100 bits (10 x 10 grid)
         board = new BitSet(ROWS * COLS);
     }
 
@@ -45,5 +54,9 @@ public class Board {
             }
             System.out.println();
         }
+    }
+
+    public BitSet getBoard() {
+        return board;
     }
 }
