@@ -1,7 +1,13 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.List;
+
 public class Piece {
     private Board pieceBoard;
     private int height;
     private int width;
+    private Board[] positions;
 
     // takes in a board, and assumes that everything in the board is part of the piece
     public Piece(Board board) {
@@ -45,5 +51,60 @@ public class Piece {
 
     public int getWidth() {
         return width;
+    }
+
+    private Board[] generateAllPiecePositions() {
+        int x = 8 - height + 1;
+        int y = 8 - width + 1;
+        Board[] allPositions = new Board[x * y];
+
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                Board newPosition = new Board();
+                for (int r = 0; r < height; r++) {
+                    for (int c = 0; c < width; c++) {
+                        if (pieceBoard.getCell(r, c)) {
+                            newPosition.setCell(r + i, c + j);
+                        }
+                    }
+                }
+                allPositions[i * y + j] = newPosition;
+            }
+        }
+        positions = allPositions;
+        return positions;
+    }
+
+    public Board[] getPositions() {
+        if (positions == null) {
+            positions = generateAllPiecePositions();
+        }
+        return positions;
+    }
+
+    public Board[] getValidPositions(Board board) {
+        Board[] allPositions = getPositions();
+        List<Board> validPositions = new ArrayList<>();
+        for (Board position : allPositions) {
+            if (isValidPosition(board, position)) {
+                validPositions.add(position);
+            }
+        }
+
+        return validPositions.toArray(new Board[0]);
+    }
+
+    private boolean isValidPosition(Board board, Board position) {
+        BitSet bitBoard = board.getBoard();
+        BitSet bitPosition = position.getBoard();
+        BitSet combined = (BitSet) bitBoard.clone();
+        combined.or(bitPosition);
+
+        // (combined NAND position) NAND board should be empty
+        // combined NAND position
+        combined.xor(bitPosition);
+        combined.xor(bitBoard);
+
+        return combined.isEmpty();
     }
 }
