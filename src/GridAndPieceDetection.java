@@ -88,7 +88,7 @@ public class GridAndPieceDetection {
 
             // Threshold to highlight bright blocks
             Mat binary2 = new Mat();
-            Imgproc.threshold(valueChannel, binary2, 200, 255, Imgproc.THRESH_BINARY);
+            Imgproc.threshold(valueChannel, binary2, 208, 255, Imgproc.THRESH_BINARY);
 
             // Find outer piece contours
             List<MatOfPoint> pieceContours = new ArrayList<>();
@@ -111,7 +111,7 @@ public class GridAndPieceDetection {
                 Mat roiValue = roiChannels.get(2);
 
                 Mat blockBinary = new Mat();
-                Imgproc.threshold(roiValue, blockBinary, 180, 255, Imgproc.THRESH_BINARY);
+                Imgproc.threshold(roiValue, blockBinary, 230, 255, Imgproc.THRESH_BINARY);
 
                 // Find small block contours inside the piece
                 List<MatOfPoint> blockContours = new ArrayList<>();
@@ -254,7 +254,7 @@ public class GridAndPieceDetection {
 
         // Threshold to highlight bright blocks
         Mat binary2 = new Mat();
-        Imgproc.threshold(valueChannel, binary2, 200, 255, Imgproc.THRESH_BINARY);
+        Imgproc.threshold(valueChannel, binary2, 208, 255, Imgproc.THRESH_BINARY);
 
         // Find outer piece contours
         List<MatOfPoint> pieceContours = new ArrayList<>();
@@ -279,7 +279,7 @@ public class GridAndPieceDetection {
             Mat roiValue = roiChannels.get(2);
 
             Mat blockBinary = new Mat();
-            Imgproc.threshold(roiValue, blockBinary, 180, 255, Imgproc.THRESH_BINARY);
+            Imgproc.threshold(roiValue, blockBinary, 230, 255, Imgproc.THRESH_BINARY);
 
             // Find small block contours inside the piece
             List<MatOfPoint> blockContours = new ArrayList<>();

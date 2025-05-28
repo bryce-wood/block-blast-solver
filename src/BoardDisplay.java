@@ -3,8 +3,8 @@ import javax.swing.*;
 import org.opencv.core.Mat;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class BoardDisplay extends JFrame {
     private static final int CELL_SIZE = 30;
@@ -28,15 +28,25 @@ public class BoardDisplay extends JFrame {
         pack();
         setLocationRelativeTo(null);
 
-        // Add button to restart the process
-        JButton restartButton = new JButton("Take Screenshot and Restart");
-        restartButton.addActionListener(new ActionListener() {
+        // Add key listener for space bar
+        addKeyListener(new KeyListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                restartProcess();
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                    restartProcess();
+                }
             }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
         });
-        add(restartButton, BorderLayout.SOUTH);
+
+        // Ensure the window is focused to capture key events
+        setFocusable(true);
+        requestFocusInWindow();
     }
 
     private JPanel createBoardPanel(Board board, Board overlay, String title) {

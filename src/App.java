@@ -24,6 +24,8 @@ public class App {
         // fill the board with the pieces that are already there
 
         Board board = new Board(screenshot);
+        board.printBoard();
+        System.out.println();
 
         // (2) Retrieve the piece options
         // determine where the pieces are
@@ -31,6 +33,10 @@ public class App {
         // note that there may be less than three pieces if one of the pieces has already been played
 
         Piece[] pieces = GridAndPieceDetection.imageToPieces(screenshot);
+        for (Piece piece : pieces) {
+            piece.printPiece();
+            System.out.println();
+        }
 
         // (3) Calculate the optimal moves for the three pieces
         // start by determining every possible set of moves for the pieces, if a previous move makes a future piece unplayable, prune it
