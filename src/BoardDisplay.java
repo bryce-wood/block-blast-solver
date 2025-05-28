@@ -1,14 +1,21 @@
 import javax.swing.*;
+
+import org.opencv.core.Mat;
+
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class BoardDisplay extends JFrame {
     private static final int CELL_SIZE = 30;
     private static final int BOARD_SIZE = 8;
+    private Board[] boards;
 
     public BoardDisplay(Board[] boards) {
+        this.boards = boards;
         setTitle("Block Blast Moves");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
+
         JPanel mainPanel = new JPanel(new GridLayout(1, 3, 10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -20,6 +27,16 @@ public class BoardDisplay extends JFrame {
         add(mainPanel);
         pack();
         setLocationRelativeTo(null);
+
+        // Add button to restart the process
+        JButton restartButton = new JButton("Take Screenshot and Restart");
+        restartButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                restartProcess();
+            }
+        });
+        add(restartButton, BorderLayout.SOUTH);
     }
 
     private JPanel createBoardPanel(Board board, Board overlay, String title) {
@@ -32,7 +49,7 @@ public class BoardDisplay extends JFrame {
                 JPanel cell = new JPanel();
                 cell.setPreferredSize(new Dimension(CELL_SIZE, CELL_SIZE));
                 cell.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                
+
                 if (overlay.getCell(r, c)) {
                     // Show piece overlay in green
                     cell.setBackground(Color.GREEN);
@@ -43,11 +60,40 @@ public class BoardDisplay extends JFrame {
                     // Empty cell in white
                     cell.setBackground(Color.WHITE);
                 }
-                
+
                 boardPanel.add(cell);
             }
         }
         panel.add(boardPanel, BorderLayout.CENTER);
         return panel;
+    }
+
+    private void restartProcess() {
+        try {
+            // Capture a new screenshot
+            ScreenCapture capture = new ScreenCapture();
+            Mat screenshot = capture.captureScreen();
+
+            if (screenshot == null || screenshot.empty()) {
+                JOptionPane.showMessageDialog(this, "Failed to capture screen or convert to Mat", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Initialize the board and pieces
+            Board board = new Board(screenshot);
+            Piece[] pieces = GridAndPieceDetection.imageToPieces(screenshot);
+
+            // Find best moves and update the GUI
+            Board[] newBoards = App.findBestMoves(board, pieces);
+            if (newBoards != null) {
+                dispose(); // Close the current window
+                SwingUtilities.invokeLater(() -> {
+                    BoardDisplay newDisplay = new BoardDisplay(newBoards);
+                    newDisplay.setVisible(true);
+                });
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "An error occurred: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

@@ -342,10 +342,10 @@ public class GridAndPieceDetection {
         // Create a BitSet for each piece, each piece is composed of blocks that are touching each other (including diagonally)
         Piece[] pieces = new Piece[3]; // there will be at most 3 pieces
         for (int p = 0; p < 3; p++) {
-            for (int i = 0; i < blockCoords.size(); i++) {
-                System.out.printf("(%d, %d), ", blockCoords.get(i)[0], blockCoords.get(i)[1]);
-            }
-            System.out.println();
+            // for (int i = 0; i < blockCoords.size(); i++) {
+            //     System.out.printf("(%d, %d), ", blockCoords.get(i)[0], blockCoords.get(i)[1]);
+            // }
+            // System.out.println();
             List<int[]> piece = new ArrayList<>();
             piece.add(blockCoords.remove(0));
             for (int i = 0; i < blockCoords.size(); i++) {

@@ -24,8 +24,6 @@ public class App {
         // fill the board with the pieces that are already there
 
         Board board = new Board(screenshot);
-        board.printBoard();
-        System.out.println();
 
         // (2) Retrieve the piece options
         // determine where the pieces are
@@ -33,10 +31,6 @@ public class App {
         // note that there may be less than three pieces if one of the pieces has already been played
 
         Piece[] pieces = GridAndPieceDetection.imageToPieces(screenshot);
-        for (Piece piece : pieces) {
-            piece.printPiece();
-            System.out.println();
-        }
 
         // (3) Calculate the optimal moves for the three pieces
         // start by determining every possible set of moves for the pieces, if a previous move makes a future piece unplayable, prune it
@@ -80,7 +74,10 @@ public class App {
                 positions[j].detectClears();
             }
             for (int j = 0; j < positions.length; j++) {
-                for (int k = 0; k < pieces.length && k != i; k++) {
+                for (int k = 0; k < pieces.length; k++) {
+                    if (k == i) {
+                        continue; // Skip invalid values
+                    }
                     // second piece played
                     Board[] secondPositions = pieces[k].getValidPositions(positions[j]);
                     Board[] secondPositionsCopy = new Board[secondPositions.length];
@@ -92,7 +89,10 @@ public class App {
                         secondPositions[l].detectClears();
                     }
                     for (int l = 0; l < secondPositions.length; l++) {
-                        for (int m = 0; m < pieces.length && m != i && m != k; m++) {
+                        for (int m = 0; m < pieces.length; m++) {
+                            if (m == i || m == k) {
+                                continue; // Skip invalid values
+                            }
                             // third piece played
                             Board[] thirdPositions = pieces[m].getValidPositions(secondPositions[l]);
                             Board[] thirdPositionsCopy = new Board[thirdPositions.length];
