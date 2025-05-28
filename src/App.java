@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.SwingUtilities;
+
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 
@@ -46,11 +48,14 @@ public class App {
             return null;
         }
         Board[] firstBoards = allBoards.get(0);
-        for (Board board1 : firstBoards) {
-            board1.printBoard();
-            System.out.println();
-        }
-        return null;
+        
+        // Create and show the GUI
+        SwingUtilities.invokeLater(() -> {
+            BoardDisplay display = new BoardDisplay(firstBoards);
+            display.setVisible(true);
+        });
+        
+        return firstBoards;
     }
 
     public static List<Board[]> findAllPossibleMoves(Board board, Piece[] pieces) {
@@ -89,7 +94,7 @@ public class App {
                             for (int n = 0; n < thirdPositions.length; n++) {
                                 thirdPositions[n] = thirdPositions[n].combine(secondPositions[l]);
                                 thirdPositions[n].detectClears();
-                                allBoards.add(new Board[]{positions[j], secondPositions[l], thirdPositions[n], positionsCopy[j], secondPositionsCopy[l], thirdPositionsCopy[n]});
+                                allBoards.add(new Board[]{positions[j], secondPositions[l], thirdPositions[n], positionsCopy[j], secondPositionsCopy[l], thirdPositionsCopy[n], board});
                             }
                         }
                     }
