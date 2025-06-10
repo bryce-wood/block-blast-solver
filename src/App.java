@@ -55,15 +55,33 @@ public class App {
             System.out.println("No valid moves found.");
             return null;
         }
-        Board[] firstBoards = allBoards.get(0);
+        Board[][] allBoardsStatic = allBoards.toArray(new Board[0][]);
+        int[] scores = new int[allBoardsStatic.length];
+        // Calculate scores for each board configuration
+        for (int i = 0; i < allBoardsStatic.length; i++) {
+            // for now, just count the number of line clears
+            scores[i] = allBoardsStatic[i][6].numFilledCells() - allBoardsStatic[i][2].numFilledCells();
+        }
+
+        // Find the maximum score and its index
+        int maxScore = Integer.MIN_VALUE;
+        int maxIndex = -1;
+        for (int i = 0; i < scores.length; i++) {
+            if (scores[i] > maxScore) {
+                maxScore = scores[i];
+                maxIndex = i;
+            }
+        }
+
+        Board[] displayBoards = allBoards.get(maxIndex);
         
         // Create and show the GUI
         SwingUtilities.invokeLater(() -> {
-            BoardDisplay display = new BoardDisplay(firstBoards);
+            BoardDisplay display = new BoardDisplay(displayBoards);
             display.setVisible(true);
         });
         
-        return firstBoards;
+        return displayBoards;
     }
 
     public static List<Board[]> findAllPossibleMoves(Board board, Piece[] pieces) {

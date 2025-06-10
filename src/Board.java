@@ -105,4 +105,8 @@ public class Board {
             board.andNot(clearedLines);
         }
     }
+
+    public int numFilledCells() {
+        return board.cardinality();
+    }
 }
